@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 129834621}
   - component: {fileID: 129834623}
   - component: {fileID: 129834622}
+  - component: {fileID: 129834624}
   m_Layer: 5
   m_Name: pnlCardSpawner
   m_TagString: Untagged
@@ -198,6 +199,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 129834620}
   m_CullTransparentMesh: 1
+--- !u!114 &129834624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129834620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 1
+  m_ConstraintCount: 2
 --- !u!1 &408763887
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,13 +362,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee77578372ff0594da87171c68479d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redCardPrefab: {fileID: 3567615124475499836, guid: f9585a5ec34620d4aad6c107aab09a54,
-    type: 3}
   blueCardPrefab: {fileID: 8420097579484741191, guid: 824596f2547e18c4bab520cec50125e0,
     type: 3}
-  panelRectTransform: {fileID: 129834621}
-  _cardCount: 0
-  cardSpacing: 10
+  redCardPrefab: {fileID: 3567615124475499836, guid: f9585a5ec34620d4aad6c107aab09a54,
+    type: 3}
+  panel: {fileID: 129834621}
+  totalCards: 0
+  spawnDelay: 0.2
 --- !u!4 &495384953
 Transform:
   m_ObjectHideFlags: 0

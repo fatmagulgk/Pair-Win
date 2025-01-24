@@ -9,12 +9,15 @@ public class DifficultyControl : Singleton<DifficultyControl>
     List<string> difficultyList = new List<string>();
     Dropdown ddDifficulty;
     public int cardCount;
-    
-    private void Start()
+    public bool clickControl = false;
+    private void Awake()
     {
+        base.Awake();
         ddDifficulty = gameObject.GetComponent<Dropdown>();
+        ddDifficulty.onValueChanged.AddListener(SetDiffuculty);
         AddDifficulty();
-        DropdownListener();
+        ddDifficulty.value = 0;
+
     }
     public void AddDifficulty()
     {
@@ -24,25 +27,20 @@ public class DifficultyControl : Singleton<DifficultyControl>
         ddDifficulty.AddOptions(difficultyList);
     }
     public void SetDiffuculty(int index)
-    {
-        difficulty = ddDifficulty.options[index].text; ;    
+    {     
+            GameManager.Instance.SetDifficulty((Difficulty)index);                      
     }
-    
-    public void DropdownListener()
+    public void DifficultySelect(Difficulty _df)
     {
-        ddDifficulty.GetComponent<Dropdown>().onValueChanged.AddListener(SetDiffuculty);
-    }
-    public void DifficultySelect(string difficulty)
-    {
-        switch (difficulty)
+        switch (_df)
         {
-            case "Easy":
+            case Difficulty.Easy:
                 cardCount = 16;
                 break;
-            case "Medium":
+            case Difficulty.Medium:
                 cardCount = 30;
                 break;
-            case "Hard":
+            case Difficulty.Hard:
                 cardCount = 50;
                 break;
             default:Debug.Log("Herhangi bir zorluk atanmadý");
@@ -52,7 +50,14 @@ public class DifficultyControl : Singleton<DifficultyControl>
     }
     public void PlayGameControl()
     {
-        DifficultySelect(difficulty);
+        Debug.Log(GameManager.Instance == null);
+        DifficultySelect(GameManager.Instance.gameDifficulty);
     }
+}
+public enum Difficulty
+{
+    Easy,
+    Medium,
+    Hard
 }
 

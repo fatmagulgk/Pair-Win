@@ -362,13 +362,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee77578372ff0594da87171c68479d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blueCardPrefab: {fileID: 8420097579484741191, guid: 824596f2547e18c4bab520cec50125e0,
-    type: 3}
-  redCardPrefab: {fileID: 3567615124475499836, guid: f9585a5ec34620d4aad6c107aab09a54,
-    type: 3}
-  panel: {fileID: 129834621}
   totalCards: 0
-  spawnDelay: 0.2
+  redCardCount: 0
+  blueCardCount: 0
+  bigCount: 0
+  smallCount: 0
 --- !u!4 &495384953
 Transform:
   m_ObjectHideFlags: 0
@@ -1204,6 +1202,7 @@ GameObject:
   - component: {fileID: 1887559633}
   - component: {fileID: 1887559635}
   - component: {fileID: 1887559634}
+  - component: {fileID: 1887559636}
   m_Layer: 5
   m_Name: txtTimeCounter
   m_TagString: Untagged
@@ -1272,6 +1271,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887559632}
   m_CullTransparentMesh: 1
+--- !u!114 &1887559636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1887559632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34d600744adc3a43a9e412f15973440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countdownTime: 90
+  timerText: {fileID: 1887559634}
 --- !u!1 &2042376644
 GameObject:
   m_ObjectHideFlags: 0

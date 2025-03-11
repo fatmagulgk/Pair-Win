@@ -29,7 +29,7 @@ public class CardController : Singleton<CardController>
 
     public void CardCountIdentifier()
     {
-        int determinedEvenNumber = Random.Range(4, totalCards);
+        int determinedEvenNumber = Random.Range(1, totalCards);
         Debug.Log(determinedEvenNumber);
         if (!(determinedEvenNumber % 2 == 0) )
         {

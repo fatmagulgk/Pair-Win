@@ -734,16 +734,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0598515f6056df49ab3df2a38fdef21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redCardPrefab: {fileID: 3567615124475499836, guid: f9585a5ec34620d4aad6c107aab09a54,
+  redCardPrefab: {fileID: 6444310606741016107, guid: f9585a5ec34620d4aad6c107aab09a54,
     type: 3}
-  blueCardPrefab: {fileID: 8420097579484741191, guid: 824596f2547e18c4bab520cec50125e0,
+  blueCardPrefab: {fileID: 6502484906957762191, guid: 824596f2547e18c4bab520cec50125e0,
     type: 3}
-  redCardCount: 0
-  blueCardCount: 0
-  cards: []
   mainCamera: {fileID: 1079514470}
   rows: 0
   cols: 0
+  spacing: 1.5
+  cards: []
 --- !u!4 &820624223
 Transform:
   m_ObjectHideFlags: 0

@@ -12,15 +12,17 @@ public class CardSpawner : Singleton<CardSpawner>
     public int cols;
     public float spacing = 1.5f;       // Prefablar arasý mesafe
     public List<GameObject> cards = new List<GameObject>();
+    public float distanceFromCamera = 50f;  // Kamera ile kartlar arasýndaki mesafe
+
     private void Awake()
     {
         base.Awake();
-        
-        
+
+
     }
     void Start()
     {
-        
+
         cards = CardsBlender();
         CalculateGrid(CardController.Instance.totalCards);
         Debug.Log($"Satýr: {rows}, Sütun: {cols}");
@@ -59,26 +61,55 @@ public class CardSpawner : Singleton<CardSpawner>
     }
     public void CalculateGrid(int _totalcards)
     {
-
-        rows = Mathf.FloorToInt(Mathf.Sqrt(_totalcards));
-        cols = Mathf.CeilToInt((float)_totalcards / rows);
-
-        while (rows * cols < _totalcards)
+        if (_totalcards == 50)
         {
-            cols++;
+            rows = 5;
+            cols = 10;
         }
+        else
+        {
+            rows = Mathf.FloorToInt(Mathf.Sqrt(_totalcards));
+            cols = Mathf.CeilToInt((float)_totalcards / rows);
+
+            while (rows * cols < _totalcards)
+            {
+                cols++;
+            }
+        }
+        
 
     }
     private void SpawnPrefabs()
     {
-        if (mainCamera == null) mainCamera = Camera.main;
+        Camera cam = Camera.main;
 
-        // Kamera yüksekliði ve geniþliði
-        float height = 2f * mainCamera.orthographicSize;
-        float width = height * mainCamera.aspect;
+        if (GameManager.Instance.gameDifficulty ==Difficulty.Hard)
+        {
+            Debug.Log("kamera uzaklýðý ayarlandý");
+            distanceFromCamera *= 1f;
+        }
 
-        // Baþlangýç pozisyonu (sol üst köþe)
-        Vector3 startPos = mainCamera.transform.position - new Vector3(width / 2, height / 2, 0);
+
+        // Kamera geniþliðini hesapla
+        float camHeight = 2f * cam.orthographicSize;
+        float camWidth = camHeight * cam.aspect;
+
+        // Kart boyutunu belirle (ilk prefab üzerinden)
+        Vector3 cardSize = cards[0].GetComponent<Renderer>().bounds.size;
+
+        // Kartlarýn toplam geniþliði
+        float totalWidth = cols * (cardSize.x + spacing) - spacing;
+        float totalHeight = rows * (cardSize.z + spacing) - spacing;
+
+        // UI yüksekliðini hesapla (dünya birimlerine dönüþtür)
+        float uiHeight = 167 * camHeight / Screen.height;
+
+        // Baþlangýç pozisyonunu hesapla (merkeze ortalama) ve kameradan uzaklaþtýr
+        Vector3 startPos = new Vector3(
+            -((cols - 1) * (cardSize.x + spacing)) / 2f,  // X pozisyonu
+            -distanceFromCamera,                         // Y pozisyonu
+            ((rows - 1) * (cardSize.z + spacing)) / 2f - (uiHeight * 3.2f)  // Z pozisyonu (DAHA FAZLA NEGATÝF Z)
+        );
 
         int prefabIndex = 0;
 
@@ -86,14 +117,12 @@ public class CardSpawner : Singleton<CardSpawner>
         {
             for (int col = 0; col < cols; col++)
             {
-                // Pozisyonu hesapla
-                float xPos = startPos.x + col * spacing;
-                float yPos = startPos.y + row * spacing;
-                Vector3 spawnPosition = new Vector3(xPos, yPos, 0);
-
-                // Prefabý oluþtur
                 if (cards.Count > 0)
                 {
+                    // Pozisyonu hesapla (X ve Z deðiþiyor, Y sabit)
+                    Vector3 spawnPosition = startPos + new Vector3(col * (cardSize.x + spacing), 0, -row * (cardSize.z + spacing));
+
+                    // Prefabý oluþtur
                     GameObject prefab = cards[prefabIndex % cards.Count];
                     Instantiate(prefab, spawnPosition, Quaternion.identity);
                     prefabIndex++;

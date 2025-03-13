@@ -13,6 +13,7 @@ public class CardSpawner : Singleton<CardSpawner>
     public float spacing = 1.5f;       // Prefablar arasý mesafe
     public List<GameObject> cards = new List<GameObject>();
     public float distanceFromCamera = 50f;  // Kamera ile kartlar arasýndaki mesafe
+    public List<GameObject> spawnedCards = new List<GameObject>();
 
     private void Awake()
     {
@@ -124,8 +125,10 @@ public class CardSpawner : Singleton<CardSpawner>
 
                     // Prefabý oluþtur
                     GameObject prefab = cards[prefabIndex % cards.Count];
-                    Instantiate(prefab, spawnPosition, Quaternion.identity);
+                    GameObject spawnedCard = Instantiate(prefab, spawnPosition, Quaternion.identity);
+                    spawnedCards.Add(spawnedCard); // Kartý listeye ekledim
                     prefabIndex++;
+
                 }
             }
         }

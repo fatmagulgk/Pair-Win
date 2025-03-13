@@ -9,4 +9,5 @@ public class GameManager : PersistentSingleton<GameManager>
     {
         gameDifficulty = _difficulty;
     }
+
 }

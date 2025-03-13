@@ -19,7 +19,7 @@ public class CountdownTimer : Singleton<CountdownTimer>
 
     void Update()
     {
-        if (isCountingDown)
+        if (isCountingDown && CardAnimation.Instance.hasTurned)
         {
             if (currentTime > 0)
             {

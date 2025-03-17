@@ -9,5 +9,8 @@ public class GameManager : PersistentSingleton<GameManager>
     {
         gameDifficulty = _difficulty;
     }
-
+    public void Restart()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
 }

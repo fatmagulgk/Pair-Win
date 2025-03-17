@@ -51,12 +51,11 @@ public class CardSpawner : Singleton<CardSpawner>
     }
     void Shuffle<T>(List<T> list)
     {
-        System.Random rng = new System.Random();
         int n = list.Count;
         while (n > 1)
         {
             n--;
-            int k = rng.Next(n + 1);
+            int k = Random.Range(0, n + 1); // Unity'nin rastgele fonksiyonu
             (list[n], list[k]) = (list[k], list[n]); // Swap iþlemi
         }
     }
@@ -69,38 +68,39 @@ public class CardSpawner : Singleton<CardSpawner>
         }
         else
         {
-            rows = Mathf.FloorToInt(Mathf.Sqrt(_totalcards));
-            cols = Mathf.CeilToInt((float)_totalcards / rows);
+            rows = Mathf.FloorToInt(Mathf.Sqrt(_totalcards));//Ondalikli degeri alt zemine yuvarlar.
+            cols = Mathf.CeilToInt((float)_totalcards / rows);//Ust zemine yuvarlar.
 
             while (rows * cols < _totalcards)
             {
                 cols++;
             }
         }
-        
+
 
     }
     private void SpawnPrefabs()
     {
-        Camera cam = Camera.main;
+        Camera cam = Camera.main;//Aktif olan kamera
 
-        if (GameManager.Instance.gameDifficulty ==Difficulty.Hard)
-        {
-            Debug.Log("kamera uzaklýðý ayarlandý");
-            distanceFromCamera *= 1f;
-        }
+        //if (GameManager.Instance.gameDifficulty ==Difficulty.Hard)
+        //{
+        //    Debug.Log("kamera uzaklýðý ayarlandý");
+        //    distanceFromCamera *= (int)Difficulty.Hard;
+        //}
 
 
         // Kamera geniþliðini hesapla
         float camHeight = 2f * cam.orthographicSize;
-        float camWidth = camHeight * cam.aspect;
+        //float camWidth = camHeight * cam.aspect;
 
         // Kart boyutunu belirle (ilk prefab üzerinden)
         Vector3 cardSize = cards[0].GetComponent<Renderer>().bounds.size;
+        Debug.Log("Card Size :" + cardSize.x +" " +cardSize.y +" " + cardSize.z);
 
-        // Kartlarýn toplam geniþliði
-        float totalWidth = cols * (cardSize.x + spacing) - spacing;
-        float totalHeight = rows * (cardSize.z + spacing) - spacing;
+        //// Kartlarýn toplam geniþliði
+        //float totalWidth = cols * (cardSize.x + spacing) - spacing;
+        //float totalHeight = rows * (cardSize.z + spacing) - spacing;
 
         // UI yüksekliðini hesapla (dünya birimlerine dönüþtür)
         float uiHeight = 167 * camHeight / Screen.height;
@@ -109,9 +109,9 @@ public class CardSpawner : Singleton<CardSpawner>
         Vector3 startPos = new Vector3(
             -((cols - 1) * (cardSize.x + spacing)) / 2f,  // X pozisyonu
             -distanceFromCamera,                         // Y pozisyonu
-            ((rows - 1) * (cardSize.z + spacing)) / 2f - (uiHeight * 3.2f)  // Z pozisyonu (DAHA FAZLA NEGATÝF Z)
+            ((rows - 1) * (cardSize.z + spacing)) / 2f - (uiHeight * 3.2f)  // Z pozisyonu (DAHA FAZLA NEGATÝF Z)  
         );
-
+        Debug.Log("StartPos : " + startPos);
         int prefabIndex = 0;
 
         for (int row = 0; row < rows; row++)
@@ -122,6 +122,7 @@ public class CardSpawner : Singleton<CardSpawner>
                 {
                     // Pozisyonu hesapla (X ve Z deðiþiyor, Y sabit)
                     Vector3 spawnPosition = startPos + new Vector3(col * (cardSize.x + spacing), 0, -row * (cardSize.z + spacing));
+                    Debug.Log($"({row},{col}) spawn point:{spawnPosition}");
 
                     // Prefabý oluþtur
                     GameObject prefab = cards[prefabIndex % cards.Count];

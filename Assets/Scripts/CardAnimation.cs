@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class CardAnimation : Singleton<CardAnimation>
 {
-    public float rotationDuration = 0.5f; // Dönme süresi
-    public float delayBetweenRotations = 0.5f; // Dönmeler arasýndaki bekleme süresi
-    public float displayTime = 2f; // Kartlarýn açýk kalacaðý süre
+    [SerializeField] float rotationDuration = 0.05f; // Dönme süresi
+    [SerializeField] float displayTime = 0.01f; // Kartlarýn açýk kalacaðý süre
     private Sequence rotationSequence; // Döndürme sekansý
-    public bool hasTurned = false; // Kartlarýn döndürülüp döndürülmediðini kontrol eden flag
+    public bool endAnimation = false; // Kartlarýn döndürülüp döndürülmediðini kontrol eden flag
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class CardAnimation : Singleton<CardAnimation>
     private void RotateCards()
     {
         // Ýlk döndürme iþlemi yapýlmadýysa
-        if (hasTurned)
+        if (endAnimation)
             return;
 
         // Önceki dönüþ iþlemi devam ediyorsa iptal et
@@ -49,7 +49,7 @@ public class CardAnimation : Singleton<CardAnimation>
         foreach (var card in CardSpawner.Instance.spawnedCards)
         {
             // Kartý 180 derece döndür, böylece kartlarý açýyoruz
-            rotationSequence.Append(card.transform.DORotate(new Vector3(0f, 0f, 0f), rotationDuration, RotateMode.FastBeyond360)
+            rotationSequence.Append(card.transform.DORotate(new Vector3(0f, 0f, 0f), rotationDuration*2, RotateMode.FastBeyond360)
                 .SetEase(Ease.InOutSine)); // Kartlar açýlýyor
         }
 
@@ -67,11 +67,38 @@ public class CardAnimation : Singleton<CardAnimation>
         rotationSequence.AppendCallback(() =>
         {
             Debug.Log("Kartlar açýldý ve sonra kapandý.");
-            hasTurned = true; // Animasyon tamamlandý, kartlar açýldý ve kapandý
+            endAnimation = true; // Animasyon tamamlandý, kartlar açýldý ve kapandý
         });
 
         // Sekansý çalýþtýr
         rotationSequence.Play();
+    }
+    public void OpenCard(CardBehaviour card)
+    {
+        if (card.IsTurned()||GameManager.Instance.HowManyTurnedCard >= 2)
+            return;
+        card.SetBusy(true);
+        card.transform.DORotate(new Vector3(0f, 0f, 0f), rotationDuration, RotateMode.FastBeyond360)
+                .SetEase(Ease.InOutSine).OnComplete(()=>card.SetBusy(false));
+
+        OpenCardProcess(card);
+
+    }
+    public Tween CloseCard(CardBehaviour card)
+    {
+        card.SetTurned(false);
+        return card.transform.DORotate(new Vector3(0f, 0f, 180f), rotationDuration*2, RotateMode.FastBeyond360)
+                .SetEase(Ease.InOutSine);
+
+        
+    }
+    public void OpenCardProcess(CardBehaviour card)
+    {
+        GameManager.Instance.HowManyTurnedCard++;
+        GameManager.Instance.SetCard(card);
+        card.SetTurned(true);
+
+
     }
 
 

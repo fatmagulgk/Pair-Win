@@ -19,7 +19,7 @@ public class MenuManager : Singleton<MenuManager>
     } 
     public void GameSceneChange()
     {
-        DifficultyControl.Instance.PlayGameControl();
+        DifficultyControl.Instance.PlayGameControl();   
         SceneManager.LoadScene(1);
     }
     public void GameExit()
